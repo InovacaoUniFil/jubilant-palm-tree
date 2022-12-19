@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <script>
-    const myHeaders = new Headers({
-        'Access-Control-Allow-Origin': 'unifil.test.instructure.com',
-        'Access-Control-Allow-Methods:': 'GET'
-    });
+    let userData;
+    let name = document.createElement('h2');
+    fetch("https://unifil.test.instructure.com/api/v1/users/self",
+        {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Access-Control-Allow-Origin': 'tickets-movi.vercel.app/',
+            'Access-Control-Allow-Methods:': 'GET',
+            'Content-Type': 'application/json'
+        },})
+        .then(
+        (data => {
+            userData = data;
+            userData.map(function(userData) {
+
+            name.innerHTML= '${userData.name}';
+            
+        });
+        })
+    )
 </script>
 <head>
     
@@ -50,18 +67,6 @@
             <ul id="userData"></ul>
             <script>
                 const ul = document.getElementById('userData');
-                let userData;
-                let name = document.createElement('h2');
-                fetch("https://unifil.test.instructure.com/api/v1/users/self", myHeaders).then(
-                    (data => {
-                        userData = data;
-                        userData.map(function(userData) {
-
-                        name.innerHTML= '${userData.name}';
-                        
-                    });
-                    })
-                )
                 ul.appendChild(name);
             </script>
             <div class="row">
