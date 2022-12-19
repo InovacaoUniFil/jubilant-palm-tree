@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <script>
+    const myHeaders = new Headers({
+        'Access-Control-Allow-Origin': 'unifil.test.instructure.com',
+        'Access-Control-Allow-Methods:': 'GET'
+    });
 </script>
 <head>
+    
     <!-- Meta Tags -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -47,8 +52,7 @@
                 const ul = document.getElementById('userData');
                 let userData;
                 let name = document.createElement('h2');
-                name.innerHTML= 'Bepis';
-                fetch("https://unifil.test.instructure.com/api/v1/users/self").then(
+                fetch("https://unifil.test.instructure.com/api/v1/users/self", myHeaders).then(
                     (data => {
                         userData = data;
                         userData.map(function(userData) {
