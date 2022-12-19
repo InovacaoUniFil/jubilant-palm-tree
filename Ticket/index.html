@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
+<script>
+</script>
 <head>
     <!-- Meta Tags -->
     <meta charset="utf-8">
@@ -41,7 +42,24 @@
 
         <!-- Conteúdo -->
         <div class="container text-center">
+            <ul id="userData"></ul>
+            <script>
+                const ul = document.getElementById('userData');
+                let userData;
+                let name = document.createElement('h2');
+                name.innerHTML= 'Bepis';
+                fetch("https://unifil.test.instructure.com/api/v1/users/self").then(
+                    (data => {
+                        userData = data;
+                        userData.map(function(userData) {
 
+                        name.innerHTML= '${userData.name}';
+                        
+                    });
+                    })
+                )
+                ul.appendChild(name);
+            </script>
             <div class="row">
                 <div class="col-12 mb-4">
                     <h2>Fale com o seu Tutor</h2>
