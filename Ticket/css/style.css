@@ -160,6 +160,10 @@ sup {
   cursor: pointer;
 }
 
+.border {
+  border: 2px solid #eee !important;
+}
+
 .btn.disabled,
 .btn:disabled {
     opacity: 0.45;
