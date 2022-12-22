@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
+<script>
+</script>
 <head>
     <!-- Meta Tags -->
     <meta charset="utf-8">
@@ -58,7 +59,7 @@
                             </div>
                             <div class="col-12">
                                 <button type="button" class="btn btn-primary btn-lg mt-4"
-                                    onclick="location.href='sucesso.html';">Criar Chamado para Atendimento
+                                    onclick="submit_form()">Criar Chamado para Atendimento
                                 </button>
                             </div>
                         </div>
@@ -88,6 +89,23 @@
             plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage tableofcontents footnotes mergetags autocorrect typography inlinecss',
             toolbar: 'undo redo | blocks fontsize | forecolor backcolor | bold italic underline strikethrough | link | align numlist bullist indent outdent',
         });
+        function submit_form(){
+            ticket = {
+                type: 1,
+                createdBy: {id: '1'},
+                actions:[{type:1, description: "This is a test"}]
+            };
+            fetch('https://unifil.test.instructure.com/api/v1/users/self', {
+                method: 'GET',
+                headers: {
+                    'Access-Control-Allow-Origin': 'origin-list'
+                },
+            })
+            .then(response => response.json())
+            .then(response => console.log(JSON.stringify(response)))
+            //window.location.href = 'sucesso.html';
+        
+        }
     </script>
 </body>
 
