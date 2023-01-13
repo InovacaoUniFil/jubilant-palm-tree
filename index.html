@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<script>
-</script>
 <head>
     <!-- Meta Tags -->
+    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap:">
@@ -43,7 +42,7 @@
 
             <div class="row">
                 <div class="col-12">
-                    <h2>Fale com o seu Tutor</h2>
+                    <h2 id="FaleTutor">Fale com o seu Tutor</h2>
                     <h6>Crie e acompanhe os seus chamados para esclarecer suas dúvidas e demais informações.</h6>
                     <form name="ticket" method="post">
                         <div class="row">
@@ -54,12 +53,13 @@
                                     <option value="financeiro">Financeiro</option>
                                     <option value="problema">Problema</option>
                                 </select>
+                                <input class="form-control border mt-2" id="a" type="text">
                                 <textarea style="height: 100px;" required></textarea>
                                 <input class="form-control border mt-2" type="file">
                             </div>
                             <div class="col-12">
                                 <button type="button" class="btn btn-primary btn-lg mt-4"
-                                    onclick="submit_form()">Criar Chamado para Atendimento
+                                    onclick="postToMovi()">Criar Chamado para Atendimento
                                 </button>
                             </div>
                         </div>
@@ -76,9 +76,31 @@
     <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
 
     <!-- Customização JS -->
-    <script src="js/script.js"></script>
-
+    <script type="text/javascript" src="./js/script.js">
+    
+    </script>
     <!-- Script -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+        function postToMovi(){
+            //Link Movidesk
+            let url = "https://unifilteste.movidesk.com/public/v1/persons?token=c94e0188-31fa-445b-b58b-cccb6d6efacd";
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", url, false);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            let data = JSON.stringify({
+                "id" : 1041042,
+                "isActive" : true,
+                "personType": 1,
+                "profileType": 1,
+                "businessName": "Aluno Rodrigo",
+                "userName": "rgalletto"
+            }); 
+            xhr.send(data);
+            console.log(xhr.response)
+            //location.href='sucesso.html';
+        }
+    </script>
     <script>
         // Editor Tinymce
         tinymce.init({
@@ -86,26 +108,10 @@
             language: 'pt_BR',
             menubar: false,
             height: 300,
-            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage tableofcontents footnotes mergetags autocorrect typography inlinecss',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
             toolbar: 'undo redo | blocks fontsize | forecolor backcolor | bold italic underline strikethrough | link | align numlist bullist indent outdent',
         });
-        function submit_form(){
-            ticket = {
-                type: 1,
-                createdBy: {id: '1'},
-                actions:[{type:1, description: "This is a test"}]
-            };
-            fetch('https://unifil.test.instructure.com/api/v1/users/self', {
-                method: 'GET',
-                headers: {
-                    'Access-Control-Allow-Origin': 'origin-list'
-                },
-            })
-            .then(response => response.json())
-            .then(response => console.log(JSON.stringify(response)))
-            //window.location.href = 'sucesso.html';
         
-        }
     </script>
 </body>
 
