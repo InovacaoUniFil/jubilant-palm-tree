@@ -1,14 +1,14 @@
 {
     "builds": [
       {
-        "src": "venv/index.py",
+        "src": "/venv/index.py",
         "use": "@vercel/python"
       }
     ],
     "routes": [
       {
         "src": "/venv/(.*)",
-        "dest": "venv/index.py"
+        "dest": "/venv/index.py"
       }
     ]
   }
