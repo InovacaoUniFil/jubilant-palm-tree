@@ -1,0 +1,250 @@
+/* Geral */
+html,
+body {
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: transparent;
+  font-family: 'Figtree', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #888;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 100;
+  color: #666;
+}
+
+p {
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+label {
+  color: #888;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: inline;
+}
+
+a,
+a:link,
+a:focus,
+a:hover {
+  outline: none !important;
+  text-decoration: none;
+}
+
+sup {
+  font-size: .70em;
+  top: -0.3em;
+  padding: 0 3px;
+}
+
+.wrapper {
+  height: auto;
+  width: 100%;
+  position: relative;
+  transition: all ease 0.5s;
+  -webkit-transition: all ease 0.5s;
+  -moz-transition: all ease 0.5s;
+  -ms-transition: all ease 0.5s;
+  margin-left: 0;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+.logo {
+  width: 200px;
+}
+
+.logo img {
+  max-width: 160px;
+  height: auto;
+}
+
+.logo .title {
+  margin-top: -5px;
+  margin-right: 2px;
+  text-align: center;
+}
+
+.text-primary {
+  color: #0DCAF2 !important;
+}
+
+.text-success {
+  color: #33c36f !important;
+}
+
+.text-danger {
+  color: #f55060 !important;
+}
+
+.text-warning {
+  color: #ffd451 !important;
+}
+
+.text-orange {
+  color: #FF8040;
+}
+
+.text-purple {
+  color: #7F0BD2;
+}
+
+.bg-orange {
+  background-color: #FF8040;
+}
+
+.bg-purple {
+  background-color: #7F0BD2;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FF8040;
+}
+
+.card {
+  background-color: #fff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF8040;
+  margin-bottom: 5px;
+}
+
+.card-subtitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #7F0BD2;
+  margin-bottom: 5px;
+}
+
+.card-number {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 18px;
+  margin-bottom: 0;
+}
+
+.card-subtitle i.material-symbols-outlined {
+  font-size: 14px !important;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.border {
+  border: 2px solid #eee !important;
+}
+
+.border:focus,
+.form-control:focus,
+.tox-tinymce:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #FF8040 !important;
+  outline: 0;
+  box-shadow: none !important;
+}
+
+.btn.disabled,
+.btn:disabled {
+    opacity: 0.45;
+}
+
+.btn {
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 500;
+  border-width: 0;
+}
+
+.tox-button {
+  font-size: 14px !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+  border-width: 0 !important;
+  border-radius: 0.5rem !important;
+}
+
+.btn-primary {
+  background-color: #FF8040 !important;
+  color: #fff !important;
+}
+
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:hover {
+  background-color: #E7611D !important;
+  color: #fff !important;
+}
+
+.btn-success {
+  background-color: #33c36f !important;
+  color: #fff !important;
+}
+
+.btn-success:focus,
+.btn-success:active,
+.btn-success:hover  {
+  background-color: #2dad62 !important;
+  color: #fff !important;
+}
+
+/* Editor Tinymce */
+.tox-statusbar__branding {
+  display: none !important;
+}
+
+
+/* Media Queries */
+@media (min-width: 1199.98px) {
+  
+}
+
+@media (max-width: 1199.98px) {
+  
+}
+
+@media (max-width: 991.98px) {
+  
+}
+
+@media (max-width: 767.98px) {
+  
+}
+
+@media (max-width: 575.98px) {
+  
+}
+
+@media (max-width: 414.98px) {
+
+}
