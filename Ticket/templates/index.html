@@ -43,8 +43,16 @@
             <div class="row">
                 <div class="col-12">
                     <h2 id="FaleTutor">Fale com o seu Tutor</h2>
-                    <h5>
-                        {{requestData["custom_canvas_course_name"]}}
+                    <h5 id="courseName">
+                        <script>
+                            if('{{requestData["custom_canvas_course_name"]}}' != "$Canvas.course.name"){
+                                document.getElementById("courseName").innerHTML = 'DISCIPLINA:\n {{requestData["custom_canvas_course_name"]}}'
+                                document.getElementById("courseName").classList.add(["text-success"])
+                            }else{
+                                document.getElementById("courseName").innerHTML = "Nenhuma Disciplina Selecionada"
+                                document.getElementById("courseName").classList.add(["text-warning"])
+                            }
+                        </script>
                     </h5>
                     <h6>Crie e acompanhe os seus chamados para esclarecer suas dúvidas e demais informações.</h6>
                     <div id = "alert_box"></div>
@@ -56,7 +64,7 @@
                             alert.innerHTML = "{{error}}"
                         }
                     </script>
-                    <form name="ticket" action="{{url_for("send_to_movi")}}" method="post">
+                    <form name="ticket" action="{{url_for("send_to_movi")}}" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-12 mt-2">
                                 <input type="hidden" name="custom_canvas_course_id" id="custom_canvas_course_id" value="{{requestData["custom_canvas_course_id"]}}">
@@ -64,7 +72,7 @@
                                 <input type="hidden" name="custom_user_email" id="custom_user_email" value="{{requestData["custom_user_email"]}}">
                                 <input type="hidden" name="custom_user_id" id="custom_user_id" value="{{requestData["custom_user_id"]}}">
                                 <input type="hidden" name="custom_user_login" id="custom_user_login" value="{{requestData["custom_user_login"]}}">
-                                <input type="hidden" name="custom_user_name" id="   custom_user_name" value="{{requestData["custom_user_name"]}}">
+                                <input type="hidden" name="custom_user_name" id="custom_user_name" value="{{requestData["custom_user_name"]}}">
                                 <input type="hidden" name="custom_account_name" id="custom_account_name" value="{{requestData["custom_account_name"]}}">
                                 
                                 <div class="col-12 mt-2">
@@ -80,15 +88,25 @@
                                 <script>
                                     document.getElementById("text_input").removeAttribute("required");
                                 </script>
-                                <input id="file_input" name="file_input" class="form-control border mt-2" type="file">
+                                <input type="file" id="file" name="file" class="form-control border mt-2">
                             </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary btn-lg mt-4">
-                                    Criar Chamado para Atendimento
+                                <div class="col-6 mb-4">
+                                    <button type="submit" class="btn btn-primary btn-lg col-12 mt-4">
+                                        Criar Chamado para Atendimento
+                                    </button>
+                                </div>
+                        </form>
+                        <div class="col-6 mb-4">
+                            <form action="{{url_for("movi_login_no_ticket")}}" method="post" target="_blank">
+                                <input type="hidden" name="custom_user_email" id="custom_user_email" value="{{requestData["custom_user_email"]}}">
+                                <input type="hidden" name="custom_user_login" id="custom_user_login" value="{{requestData["custom_user_login"]}}">
+                                
+                                <button type="submit" class="btn btn-outline-secondary btn-lg col-12 mt-4">
+                                    Acompanhar os seus Chamados
                                 </button>
-                            </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
