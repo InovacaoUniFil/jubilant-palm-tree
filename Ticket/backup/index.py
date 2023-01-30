@@ -5,10 +5,10 @@ import time
 from werkzeug.utils import secure_filename
 import os
 
-movi_url = 'https://unifil.movidesk.com/'
+movi_url = 'https://unimovi.movidesk.com/'
 movi_api_url = movi_url+'public/v1/'
 
-movi_token = 'token=478d1b60-5efc-461c-898b-953d7148bdf9'
+movi_token = 'token=ad262c74-d928-4602-a793-7989aff45afb'
 
 UPLOAD_FOLDER = './SaveFolder'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -24,12 +24,6 @@ def create_new_user(cpf,name,email):
         'isActive' : True,
         'personType' : 1,
         'profileType' :2,
-        'emails' : [{
-            'emailType': "Aluno",
-            'email': str(email),
-            'isDefault': True
-            }],
-        'cpfCnpj': str(cpf),
         'businessName' : str(name),
         'userName' : str(email),
         'password' : str(cpf),
@@ -60,7 +54,7 @@ def create_tutor_user(cpf,name,email,course_name):
         'teams': ["Curso - "+str(course_name)]
     }
     course = requests.post(movi_api_url+'persons?'+movi_token, json = movi_person_data)
-    print("create Tutor" + str(course))
+    print("create Tutor")
     time.sleep(0.5)
     return json.loads(course.content)
 
@@ -79,7 +73,7 @@ def create_course_user(id_curso,name):
     }
     course = requests.post(movi_api_url+'persons?'+movi_token, json = movi_person_data)
     time.sleep(0.5)
-    print("Discipline" + str(course))
+    print("Discipline")
     return json.loads(course.content)
 
 def create_ticket(user):
@@ -178,7 +172,7 @@ def send_to_movi():
     "owner" : str(student_data["nome_curso"]),
     "ownerTeam" : "Curso - "+str(student_data["nome_curso"]),
     "subject" : str(request.form["subject_type"]),
-    "category" : "Tutoria - "+str(request.form["category_type"]),
+    "category" : str(request.form["category_type"]),
     "actions" : [
         {
         "type" : 2,
@@ -187,17 +181,17 @@ def send_to_movi():
     ],
     "customFieldValues" : [
         {
-        "customFieldId" : 137236,
-        "customFieldRuleId" : 69372,
+        "customFieldId" : 136678,
+        "customFieldRuleId" : 69008,
         "line" : 1,
         "value" : coursename
         },
         {
-        "customFieldId" : 137235,
-        "customFieldRuleId" : 69373,
+        "customFieldId" : 136788,
+        "customFieldRuleId" : 69085,
         "line" : 1,
         "value" : str(student_data["nome_polo"])
-        },
+        }
     ]
     }
     print(movi_ticket_data)
