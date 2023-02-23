@@ -56,7 +56,7 @@ def create_new_user(cpf,name,email):
             break
         time.sleep(0.5)
     return json.loads(user.content)
-    
+
 def create_tutor_user(cpf,name,email,course_name):
     print("create_tutor_user")
     if email == None:
@@ -125,7 +125,7 @@ def send_to_movi():
     #alimentar Webhook
     print("alimentar Webhook")
     if str(request.form["custom_canvas_course_id"]) != "$Canvas.course.id":
-        enrollment_data = requests.get("https://unifil.test.instructure.com/api/v1/courses/"+str(request.form["custom_canvas_course_id"])+"/enrollments",headers={'Authorization':"Bearer 9257~sDA9LtZ38DkgoJosw0CEIeGBxGWEvC5tzkG1GRwMtopPRBoIUdTPRuQ6ULhC6cr1"} ,verify="./static/certs.pem")
+        enrollment_data = requests.get("https://unifil.test.instructure.com/api/v1/courses/"+str(request.form["custom_canvas_course_id"])+"/enrollments",headers={'Authorization':"Bearer 9257~YJvuvONmkSWW6oErTiT9kIURR9RKZqFtKDon0pwOhJ6LhR6B3GsbK8jTYPjoRIzt"} ,verify="./static/certs.pem")
         if (len(json.loads(enrollment_data.content)) > 0):
             print(json.loads(enrollment_data.content))
             enrollment_data = json.loads(enrollment_data.content)[0]
