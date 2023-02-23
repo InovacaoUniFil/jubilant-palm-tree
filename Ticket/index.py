@@ -17,6 +17,18 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1000 * 1000
 
+apoio_subjects = [
+    "Financeiro",
+    "Disciplinas não Disponibilizadas",
+    "Notas Divergentes",
+    "Prazo das Atividades",
+    "Dúvidas sobre Provas (Presencial)",
+    "Dúvidas/Problemas no Portal do Aluno",
+    "Dúvidas/Problemas no Ambiente Virtual de Aprendizagem",
+    "Solicitação de Certificado",
+    "Outros"
+]
+
 def create_new_user(cpf,name,email):
     print("create_new_user")
     movi_person_data = {
@@ -34,6 +46,7 @@ def create_new_user(cpf,name,email):
         'userName' : str(email),
         'password' : str(cpf),
     }
+    print(movi_person_data)
     user = requests.post(movi_api_url+'persons?'+movi_token, json = movi_person_data)
     time.sleep(0.5)
     print("created user")
@@ -43,7 +56,7 @@ def create_new_user(cpf,name,email):
             break
         time.sleep(0.5)
     return json.loads(user.content)
-
+    
 def create_tutor_user(cpf,name,email,course_name):
     print("create_tutor_user")
     if email == None:
@@ -64,6 +77,7 @@ def create_tutor_user(cpf,name,email,course_name):
     time.sleep(0.5)
     return json.loads(course.content)
 
+#Legado, não usar devido a limite de agentes
 def create_course_user(id_curso,name):
     print("create_course_user")
     movi_person_data = {
@@ -111,7 +125,7 @@ def send_to_movi():
     #alimentar Webhook
     print("alimentar Webhook")
     if str(request.form["custom_canvas_course_id"]) != "$Canvas.course.id":
-        enrollment_data = requests.get("https://unifil.test.instructure.com/api/v1/courses/"+str(request.form["custom_canvas_course_id"])+"/enrollments",headers={'Authorization':"Bearer 9257~E3ojV8VWw6jgoDh6nWCCRwje4YiT7twjHzmstImnpmdKbX590DItxn7oT8Wye7qe"} ,verify="./static/certs.pem")
+        enrollment_data = requests.get("https://unifil.test.instructure.com/api/v1/courses/"+str(request.form["custom_canvas_course_id"])+"/enrollments",headers={'Authorization':"Bearer 9257~sDA9LtZ38DkgoJosw0CEIeGBxGWEvC5tzkG1GRwMtopPRBoIUdTPRuQ6ULhC6cr1"} ,verify="./static/certs.pem")
         if (len(json.loads(enrollment_data.content)) > 0):
             print(json.loads(enrollment_data.content))
             enrollment_data = json.loads(enrollment_data.content)[0]
@@ -119,6 +133,7 @@ def send_to_movi():
             enrollment_data = {"sis_section_id" : "None"}
     else:
         enrollment_data = {"sis_section_id" : "None"}
+
     #Get student Data from Webook
     print("Get student Data from Webook")
     bearer = requests.post("https://webhook.unifil.br/login",headers={"Content-Type": "application/json"},data=json.dumps({"username":"tamadeu","email":"tamadeu@unifil.br","password":"1b396ec5-5b2a-4bcf-88d6-c63800b15408"}) ,verify="./static/certs.pem")
@@ -133,27 +148,45 @@ def send_to_movi():
     if len(student_data["nome_curso"]) > 64:
         student_data["nome_curso"] = student_data["nome_curso"][:60]
 
-    #Cadatra o curso no sistema se este não esta cadastrado
-    print("Cadatra o curso no sistema se este não esta cadastrado")
-    course = requests.get(movi_api_url+'persons?'+movi_token+'&id='+str(student_data["id_curso"]))
-    if course.status_code == 404:
-        course = create_course_user(str(student_data["id_curso"]),str(student_data["nome_curso"]))
-    course = requests.get(movi_api_url+'persons?'+movi_token+'&id='+str(student_data["id_curso"]))
-    
-    #Cadastra o tutor no sistema se este não esta cadastrado
-    print("Cadastra o tutor no sistema se este não esta cadastrado")
-    if student_data["cpf_tutor"] != None:
-        tutor = requests.get(movi_api_url+'persons?'+movi_token+'&id='+str(student_data["cpf_tutor"]))
-        if tutor.status_code == 404:
-            tutor = create_tutor_user(str(student_data["cpf_tutor"]),str(student_data["nome_tutor"]),str(student_data["email_tutor"]),str(student_data["nome_curso"]))
+    #Atrela o Tutor ao Ticket
+    owner_name = ""
+    owner_team = ""
+    category = ""
+    if (str(request.form["category_type"]) in apoio_subjects):
+        #Ticket do Apoio
+        owner_name = "Apoio - Graduação EaD"
+        owner_team = "EaD - Apoio"
+        category = str(request.form["category_type"])
+    else:
+        #Ticket Tutoria
+        print("Procura o tutor no Sistema")
+        if student_data["cpf_tutor"] != None:
+            #Com Tutor no Webhook
+            tutor = requests.get(movi_api_url+'persons?'+movi_token+'&id='+str(student_data["cpf_tutor"]))
+            if tutor.status_code == 404:
+                print("Não Encontrado")
+                #tutor = create_tutor_user(str(student_data["cpf_tutor"]),str(student_data["nome_tutor"]),str(student_data["email_tutor"]),str(student_data["nome_curso"]))     
+                owner_name = "Supervisão Tutoria EaD"
+                tutor = requests.get(movi_api_url+'persons?'+movi_token+'&id='+"7U70R")
+            else:
+                print("Encontrado")
+                owner_name = str(student_data["nome_tutor"])
         else:
-            #Se o tutor não esta vinculado à disciplina no Movidesk, vincula o tutor
-            tutor = json.loads(tutor.content)
-            if ("Curso - "+str(student_data["nome_curso"])) not in tutor["teams"]:
-                teams = tutor["teams"].copy()
-                teams.append(("Curso - "+str(student_data["nome_curso"])))
-                tutor = requests.patch(movi_api_url+'persons?'+movi_token+'&id='+str(student_data["cpf_tutor"]),headers={"Content-Type": "application/json"},data=json.dumps({"teams":teams}))
-                time.sleep(0.5)
+            #Sem Tutor no Webhook
+            owner_name = "Supervisão Tutoria EaD"
+            tutor = requests.get(movi_api_url+'persons?'+movi_token+'&id='+"7U70R")
+         
+        #Se o tutor não esta vinculado à disciplina no Movidesk, vincula o tutor
+        tutor = json.loads(tutor.content)
+        if ("Curso - "+str(student_data["nome_curso"])) not in tutor["teams"]:
+            teams = tutor["teams"].copy()
+            teams.append(("Curso - "+str(student_data["nome_curso"])))
+            tutor = requests.patch(movi_api_url+'persons?'+movi_token+'&id='+tutor["id"],headers={"Content-Type": "application/json"},data=json.dumps({"teams":teams}))
+            time.sleep(0.5)
+
+        owner_team = "Curso - "+str(student_data["nome_curso"])
+        category = "Tutoria - " + str(request.form["category_type"])
+
     #Get subject name from form, if it exists
     print("Get subject name from form, if it exists")
     coursename = str(request.form["custom_canvas_course_name"])
@@ -161,6 +194,7 @@ def send_to_movi():
         coursename = str(request.form["custom_canvas_course_name"])[:60]
     if coursename == "$Canvas.course.name":
         coursename = "Nenhuma Disciplina Selecionada"
+        
     #Create a Ticket
     print("Create a Ticket")
     movi_ticket_data = {
@@ -175,10 +209,10 @@ def send_to_movi():
         "personType" : user["personType"],
         "profileType" : user["profileType"]
     }],
-    "owner" : str(student_data["nome_curso"]),
-    "ownerTeam" : "Curso - "+str(student_data["nome_curso"]),
+    "owner" : owner_name,
+    "ownerTeam" : owner_team,
     "subject" : str(request.form["subject_type"]),
-    "category" : "Tutoria - "+str(request.form["category_type"]),
+    "category" : category,
     "actions" : [
         {
         "type" : 2,
@@ -211,8 +245,9 @@ def send_to_movi():
         if ticket.status_code!=404:
             break
         time.sleep(0.5)
-    print("Attach a file to a ticket if there is one")
+
     #Attach a file to a ticket if there is one
+    print("Attach a file to a ticket if there is one")
     if('file' in request.files):
         ticket = json.loads(ticket.content)
         action_id = ticket["actions"][0]["id"]
